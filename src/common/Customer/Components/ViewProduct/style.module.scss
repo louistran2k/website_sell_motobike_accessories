@@ -1,0 +1,30 @@
+.dialog {
+  & > div > div > div {
+    display: flex;
+  }
+  img {
+    width: 100%;
+    aspect-ratio: 1/1;
+  }
+  & > div > div {
+    width: 888px;
+    height: 450px;
+    max-width: unset !important;
+    padding: 30px;
+  }
+}
+
+.image {
+  width: 100px;
+}
+
+.slider {
+  width: 40%;
+  max-width: unset !important;
+}
+
+.description {
+  width: 60%;
+  max-width: unset !important;
+  margin-left: 30px;
+}

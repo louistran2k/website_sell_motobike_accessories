@@ -9,9 +9,11 @@ import Bg3 from './bg3.jpg';
 import Bg4 from './bg4.jpg';
 import Bg5 from './bg5.jpg';
 import LogoImg from './logo.png';
+import LogoFooterImg from './logo-footer.png';
 import supportImg from './support.png';
 import paymentImg from './payment.png';
 import freeshipImg from './freeship.png';
+import headerbg from './sidebar-header-bg.jpg';
 
 export {
   Icon1,
@@ -25,7 +27,9 @@ export {
   Bg4,
   Bg5,
   LogoImg,
+  LogoFooterImg,
   supportImg,
   paymentImg,
   freeshipImg,
+  headerbg,
 };
