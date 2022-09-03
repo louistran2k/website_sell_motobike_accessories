@@ -9,5 +9,6 @@ export const useStyles = makeStyles({
   },
   content: {
     minHeight: `calc(100vh - ${headerHeight} - ${footerHeight} + 30px) !important`,
+    marginTop: 20,
   },
 });

@@ -22,8 +22,15 @@ import * as yup from 'yup';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useStyles } from './style';
 import { ISignUp } from 'types/Customer/home';
+import { add, sub } from 'date-fns';
 
 export const digitsOnly = (value: any) => /^\d+$/.test(value);
+export const isCitizenIdentification = (value: any) => {
+  if (value.length !== 10 || value.length !== 13) {
+    return false;
+  }
+  return true;
+};
 
 const schema = yup.object().shape({
   username: yup
@@ -42,6 +49,7 @@ const schema = yup.object().shape({
   citizenIdentification: yup
     .string()
     .required('Đây là trường bắt buộc')
+    .length(12, 'CCCD phải là 12 số')
     .test('Digits only', 'CCCD chỉ bao gồm ký tự số', digitsOnly),
   firstName: yup.string().required('Đây là trường bắt buộc'),
   lastName: yup.string().required('Đây là trường bắt buộc'),
@@ -55,10 +63,13 @@ const schema = yup.object().shape({
   phoneNumber: yup
     .string()
     .required('Đây là trường bắt buộc')
+    .length(10, 'Số điện thoại phải là 10 số')
     .test('Digits only', 'Số điện thoại chỉ bao gồm ký tự số', digitsOnly),
   taxCode: yup
     .string()
     .required('Đây là trường bắt buộc')
+    .min(10, 'Mã số thuế có ít nhất 10 kí tự')
+    .max(13, 'Mã số thuế có nhiều nhất 13 kí tự')
     .test('Digits only', 'Mã số thuế chỉ bao gồm ký tự số', digitsOnly),
 });
 
@@ -252,6 +263,7 @@ const SignUp = () => {
                         <DatePicker
                           label="Ngày sinh"
                           inputFormat="dd/MM/yyyy"
+                          maxDate={sub(new Date(), { years: 18 })}
                           {...field}
                           renderInput={(
                             params: JSX.IntrinsicAttributes & TextFieldProps
@@ -328,6 +340,7 @@ const SignUp = () => {
                   autoComplete="off"
                   inputProps={{
                     maxLength: 13,
+                    minLength: 10,
                   }}
                   {...register('taxCode')}
                   error={!!errors.taxCode}

@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   TextField,
+  TextFieldProps,
   Typography,
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
@@ -38,7 +39,9 @@ const schema = yup.object().shape({
   receiverPhoneNumber: yup
     .string()
     .required('Đây là trường bắt buộc')
+    .length(10, 'Số điện thoại phải là 10 số')
     .test('Digits only', 'Số điện thoại chỉ bao gồm ký tự số', digitsOnly),
+  deliveryDate: yup.date().required(),
 });
 
 const Checkout = () => {
@@ -50,11 +53,18 @@ const Checkout = () => {
 
   const {
     register,
+    control,
     formState: { isValid, errors },
     handleSubmit,
   } = useForm<CustomerOrder>({
     resolver: yupResolver(schema),
     mode: 'all',
+    defaultValues: {
+      receiverFullName: `${user.firstName.trim()} ${user.lastName.trim()}`,
+      deliveryAddress: !user.address ? '' : user.address.trim(),
+      receiverEmail: !user.email ? '' : user.email.trim(),
+      receiverPhoneNumber: user.phoneNumber.trim(),
+    }
   });
 
   useEffect(() => {
@@ -67,8 +77,7 @@ const Checkout = () => {
     const customerOrder: CustomerOrder = {
       ...data,
       createAt: new Date(),
-      status: 0,
-      deliveryDate: add(new Date(), { weeks: 1 }),
+      status: 1,
       totalPrice: calcTotalPrice(cart),
       citizenIdentification: user.citizenIdentification,
     };
@@ -95,7 +104,6 @@ const Checkout = () => {
 
   return (
     <Container>
-      <Typography variant="h2">Đăng ký</Typography>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={5}>
           <Grid item container xs={4}>
@@ -130,7 +138,6 @@ const Checkout = () => {
               label="Email người nhận"
               color="secondary"
               fullWidth
-              required
               autoComplete="off"
               inputProps={{
                 maxLength: 40,
@@ -154,6 +161,36 @@ const Checkout = () => {
               error={!!errors.receiverPhoneNumber}
               helperText={errors.receiverPhoneNumber?.message ?? ''}
             />
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <Controller
+                name="deliveryDate"
+                control={control}
+                defaultValue={null}
+                render={({ field }) => {
+                  return (
+                    <DatePicker
+                      label="Ngày giao"
+                      inputFormat="dd/MM/yyyy"
+                      minDate={add(new Date(), { days: 3 })}
+                      {...field}
+                      renderInput={(
+                        params: JSX.IntrinsicAttributes & TextFieldProps
+                      ) => (
+                        <TextField
+                          InputLabelProps={{
+                            style: { color: 'var(--secondary-color)' },
+                          }}
+                          color="secondary"
+                          required
+                          fullWidth
+                          {...params}
+                        />
+                      )}
+                    />
+                  );
+                }}
+              />
+            </LocalizationProvider>
           </Grid>
           <Grid item xs={8}>
             <Typography variant="h4">Sản phẩm</Typography>

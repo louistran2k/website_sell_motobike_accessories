@@ -103,9 +103,11 @@ const homeSlice = createSlice({
       });
     },
     logout: (state) => {
+      console.log(123);
       removeAccessToken();
       // Object.assign(state, initialState);
       state.accessToken = null;
+      state.user = userInit;
     },
   },
   extraReducers(builder) {
@@ -177,6 +179,6 @@ const homeSlice = createSlice({
 
 const { reducer: homeReducer } = homeSlice;
 
-export const { addToCart, setQuantityCartItem } = homeSlice.actions;
+export const { addToCart, setQuantityCartItem, logout } = homeSlice.actions;
 
 export default homeReducer;

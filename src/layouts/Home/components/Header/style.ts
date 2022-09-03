@@ -5,7 +5,7 @@ import { createStyles, makeStyles } from '@mui/styles';
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     header: {
-      padding: '5px 0',
+      padding: '10px 0',
     },
 
     root: {

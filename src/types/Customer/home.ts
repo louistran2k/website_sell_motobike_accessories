@@ -88,7 +88,7 @@ export interface CustomerOrder {
   receiverPhoneNumber: string;
   createAt: Date;
   status: number;
-  deliveryDate: Date;
+  deliveryDate: Date | null;
   totalPrice: number;
   citizenIdentification: string;
 }

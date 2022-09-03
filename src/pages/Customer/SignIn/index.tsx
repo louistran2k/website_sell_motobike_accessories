@@ -20,7 +20,7 @@ const schema = yup.object().shape({
   username: yup
     .string()
     .required('Đây là trường bắt buộc')
-    .min(2, 'Tên tài khoản phải có số ký tự lớn hơn 2'),
+    .min(6, 'Tên tài khoản phải có số ký tự lớn hơn 6'),
   password: yup
     .string()
     .required('Đây là trường bắt buộc')
@@ -48,9 +48,10 @@ const SignIn = () => {
 
   const onSubmit = async (data: ISignIn) => {
     const res = await dispatch(signIn(data));
-    if (!!res.payload) {
-      navigate('/checkout');
-    }
+    navigate(-1);
+    // if (!!res.payload) {
+    //   navigate('/checkout');
+    // }
   };
 
   return (

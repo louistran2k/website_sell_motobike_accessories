@@ -1,7 +1,6 @@
 import { Container, Grid, Divider, Typography } from '@mui/material';
 import ProductItem from 'common/Customer/Components/ProductItem';
 import ViewProduct from 'common/Customer/Components/ViewProduct';
-import { title } from 'process';
 import { useState } from 'react';
 import { useCustomerSelector } from 'store/Customer/hooks';
 import { getProduct, getSearch } from 'store/Customer/selectors';
@@ -31,7 +30,7 @@ const Search = () => {
             <Grid item xs={1}>
               <Divider />
             </Grid>
-            <Typography variant="h2">{title}</Typography>
+            <Typography variant="h2">{`Kết quả tìm kiếm`}</Typography>
             <Divider />
           </Grid>
           <Divider />
