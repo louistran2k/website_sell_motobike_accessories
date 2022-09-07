@@ -1,6 +1,12 @@
-import { ISignIn } from './../../../types/Customer/home';
+import {
+  GetMyOrdersReq,
+  ISignIn,
+  ISignUp,
+  ORDER_STATUS,
+  User,
+} from './../../../types/Customer/home';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axiosClient from 'api/axiosClient';
+import { axiosClient, axiosClientWithToken } from 'api/axiosClient';
 
 export const getAllProductGroupAsync = createAsyncThunk(
   'productGroup/getAll',
@@ -194,6 +200,112 @@ export const signIn = createAsyncThunk(
         username,
         password,
       });
+      return res;
+    } catch (error) {
+      throw new Error(String(error));
+    }
+  }
+);
+export const signUp = createAsyncThunk(
+  'customer/signUp',
+  async ({
+    username,
+    password,
+    citizenIdentification,
+    lastName,
+    firstName,
+    gender,
+    dateOfBirth,
+    address,
+    phoneNumber,
+    email,
+    taxCode,
+  }: ISignUp) => {
+    try {
+      const res = await axiosClient.post('api/account/sign-up', {
+        username,
+        password,
+        roleId: 'KH',
+        citizenIdentification,
+        lastName,
+        firstName,
+        gender,
+        dateOfBirth,
+        address,
+        phoneNumber,
+        email,
+        taxCode,
+      });
+      return res;
+    } catch (error) {
+      throw new Error(String(error));
+    }
+  }
+);
+export const updateUserInformation = createAsyncThunk(
+  'customer/update',
+  async ({
+    citizenIdentification,
+    lastName,
+    firstName,
+    gender,
+    dateOfBirth,
+    address,
+    phoneNumber,
+    email,
+    taxCode,
+  }: User) => {
+    try {
+      const res = await axiosClientWithToken.post('api/customer/update', {
+        citizenIdentification,
+        lastName,
+        firstName,
+        gender,
+        dateOfBirth,
+        address,
+        phoneNumber,
+        email,
+        taxCode,
+      });
+      return res;
+    } catch (error) {
+      throw new Error(String(error));
+    }
+  }
+);
+
+export const getMyOrdersAsync = createAsyncThunk(
+  'customer/myOrders',
+  async ({ status, citizenIdentification }: GetMyOrdersReq) => {
+    try {
+      const res = await axiosClientWithToken.get('api/customerOrder/getMyOrders', {
+        params: {
+          citizenIdentification,
+          status,
+        },
+      });
+      return res.data;
+    } catch (error) {
+      throw new Error(String(error));
+    }
+  }
+);
+
+export const cancelOrderAsync = createAsyncThunk(
+  'customer/cancelOrder',
+  async (id: number) => {
+    try {
+      const res = await axiosClientWithToken.put(
+        'api/customerOrder/cancelled',
+        {
+          status: 4,
+        },
+        {
+          params: {
+            id,
+          },
+        }
+      );
       return res;
     } catch (error) {
       throw new Error(String(error));

@@ -83,13 +83,13 @@ const ViewProduct = ({ product, open, handleClose }: Props) => {
                 className={viewProductStyles['image']}
                 disableGutters
               >
-                <img src={item} alt={product.productName} />
+                <img src={item} alt={product.name} />
               </Container>
             ))}
           </Slider>
         </div>
         <div className={viewProductStyles['description']}>
-          <Typography variant="h4">{product.productName}</Typography>
+          <Typography variant="h4">{product.name}</Typography>
           <Typography variant="body1" component="span">
             Hãng sản xuất:{' '}
           </Typography>

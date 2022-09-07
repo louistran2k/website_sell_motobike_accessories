@@ -145,7 +145,7 @@ const Products = () => {
       {open && (
         <ViewProduct product={product} open={open} handleClose={handleClose} />
       )}
-      <Container disableGutters>
+      <Container disableGutters className="content-block">
         {arr.length > 0 && (
           <Container>
             {arr.map((item) => (
@@ -165,7 +165,7 @@ const Products = () => {
         <Container
           component="div"
           disableGutters
-          style={{ paddingBottom: '20px' }}
+          style={{ paddingBottom: '20px', marginTop: '15px' }}
         >
           <Grid container alignItems="center" columns={20}>
             <Grid item xs={1}>

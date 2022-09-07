@@ -15,6 +15,8 @@ import {
 } from 'store/Customer/Home/thunkActions';
 import Main from 'pages/Customer/Main';
 import Footer from './components/Footer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type Props = {
   children: JSX.Element;
@@ -40,6 +42,14 @@ function CustomerLayout({ children }: Props) {
           {children}
         </Container>
         <Footer />
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={true}
+          closeOnClick={true}
+          pauseOnHover={true}
+          draggable={false}
+        />
       </div>
     </ThemeProvider>
   );

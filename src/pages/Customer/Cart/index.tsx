@@ -28,7 +28,7 @@ const Cart = () => {
   };
 
   return (
-    <Container disableGutters>
+    <Container disableGutters className="content-block">
       <Typography variant="h2">Giỏ hàng</Typography>
       <Divider />
       {!!cart.length ? (

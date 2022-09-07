@@ -20,7 +20,7 @@ const Search = () => {
       {open && (
         <ViewProduct product={product} open={open} handleClose={handleClose} />
       )}
-      <Container disableGutters>
+      <Container disableGutters className="content-block">
         <Container
           component="div"
           disableGutters

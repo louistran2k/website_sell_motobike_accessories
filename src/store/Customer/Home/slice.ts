@@ -4,11 +4,14 @@ import {
   ProductType,
   CustomerOrder,
   User,
+  ORDER_STATUS,
 } from './../../../types/Customer/home';
 import {
+  cancelOrderAsync,
   getAllProductGroupAsync,
   getAllProductTypeAsync,
   getFeatureProductsAsync,
+  getMyOrdersAsync,
   getNewProductsAsync,
   getProductByIdAsync,
   getProductsWithRangeAsync,
@@ -16,8 +19,11 @@ import {
   getRandomProductsAsync,
   searchByName,
   signIn,
+  signUp,
+  updateUserInformation,
 } from './thunkActions';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { HomeState } from 'types/Customer/home';
 import {
   getAccessToken,
@@ -33,7 +39,7 @@ export const convertCurrency = (price: number) =>
 
 export const productInit: Product = {
   productId: '',
-  productName: '',
+  name: '',
   description: '',
   images: [],
   isNew: false,
@@ -52,7 +58,7 @@ const userInit: User = {
   citizenIdentification: '',
   firstName: '',
   lastName: '',
-  gender: false,
+  gender: null,
   dateOfBirth: null,
   address: '',
   email: '',
@@ -79,6 +85,10 @@ export const initialState: HomeState = {
     getAccessToken() !== null
       ? JSON.parse(getAccessToken() as string).user
       : userInit,
+  isShowInfo: false,
+  isShowPurchaseDetail: false,
+  orderId: -1,
+  myOrders: [],
 };
 
 const homeSlice = createSlice({
@@ -103,11 +113,17 @@ const homeSlice = createSlice({
       });
     },
     logout: (state) => {
-      console.log(123);
       removeAccessToken();
       // Object.assign(state, initialState);
       state.accessToken = null;
       state.user = userInit;
+    },
+    setIsShowInfo: (state) => {
+      state.isShowInfo = !state.isShowInfo;
+    },
+    setIsShowPurchaseDetail: (state, { payload }) => {
+      state.isShowPurchaseDetail = !state.isShowPurchaseDetail;
+      state.orderId = payload;
     },
   },
   extraReducers(builder) {
@@ -171,14 +187,56 @@ const homeSlice = createSlice({
     });
     builder.addCase(signIn.fulfilled, (state, { payload }) => {
       state.accessToken = payload.data.accessToken;
-      setAccessToken(payload.data);
-      state.user = payload.data.user;
+      state.user = {
+        ...payload.data.user,
+        gender: payload.data.user.gender ? 1 : 0,
+      };
+      const storage = {
+        accessToken: state.accessToken as string,
+        user: state.user,
+      };
+      setAccessToken(storage);
+    });
+    builder.addCase(signIn.rejected, (state, { payload }) => {
+      toast.error('Đăng nhập thất bại');
+    });
+    builder.addCase(signUp.fulfilled, (state, { payload }) => {
+      toast.success('Đăng ký tài khoản thành công');
+    });
+    builder.addCase(signUp.rejected, (state, { payload }) => {
+      toast.error('Đăng ký tài khoản thất bại');
+    });
+    builder.addCase(updateUserInformation.fulfilled, (state, { payload }) => {
+      toast.success('Chỉnh sửa thông tin thành công');
+    });
+    builder.addCase(updateUserInformation.rejected, (state, { payload }) => {
+      toast.error('Chỉnh sửa thông tin thất bại');
+    });
+    builder.addCase(getMyOrdersAsync.fulfilled, (state, { payload }) => {
+      state.myOrders = payload;
+    });
+    builder.addCase(cancelOrderAsync.fulfilled, (state, { payload }) => {
+      state.myOrders.forEach((item) => {
+        if (item.id === payload.config.params.id) {
+          item.status = ORDER_STATUS['Đã hủy'];
+        }
+      });
+      toast.success('Hủy đơn hàng thành công');
+    });
+    builder.addCase(cancelOrderAsync.rejected, (state, { payload }) => {
+      toast.error('Hủy đơn hàng không thành công!');
     });
   },
 });
 
 const { reducer: homeReducer } = homeSlice;
 
-export const { addToCart, setQuantityCartItem, logout } = homeSlice.actions;
+export const {
+  addToCart,
+  setQuantityCartItem,
+  logout,
+  setIsShowInfo,
+  setIsShowPurchaseDetail,
+} = homeSlice.actions;
 
 export default homeReducer;

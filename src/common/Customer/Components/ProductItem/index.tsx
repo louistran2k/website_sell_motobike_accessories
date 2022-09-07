@@ -35,7 +35,7 @@ const ProductItem = ({ product, handleClickOpen }: Props) => {
   return (
     <div className={productItemStyles['product']} onClick={handleClickProduct}>
       <div className={productItemStyles['product__top']}>
-        <img src={product.images[0]} alt={product.productName} />
+        <img src={product.images[0]} alt={product.name} />
         {product.isNew && (
           <span className={productItemStyles['product__new']}>NEW</span>
         )}
@@ -46,7 +46,7 @@ const ProductItem = ({ product, handleClickOpen }: Props) => {
         )}
       </div>
       <div className={productItemStyles['product__bottom']}>
-        <Typography variant="h5">{product.productName}</Typography>
+        <Typography variant="h5">{product.name}</Typography>
         <span
           className={`${
             !!product.discountPercent && 'line-through'

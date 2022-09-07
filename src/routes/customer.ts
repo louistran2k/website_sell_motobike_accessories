@@ -8,6 +8,7 @@ const Products = lazy(() => import('pages/Customer/Products'));
 const Search = lazy(() => import('pages/Customer/Search'));
 const Checkout = lazy(() => import('pages/Customer/Checkout'));
 const Success = lazy(() => import('pages/Customer/Success'));
+const PurchaseHistory = lazy(() => import('pages/Customer/PurchaseHistory'));
 
 export const customerRoutes = [
   {
@@ -62,8 +63,8 @@ export const customerRoutes = [
     path: 'success',
     Component: Success,
   },
-  // {
-  //   path: '',
-  //   Component: ,
-  // },
+  {
+    path: 'my-order',
+    Component: PurchaseHistory,
+  },
 ];

@@ -17,11 +17,19 @@ import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDown
 import { useStyles } from './style';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import GoogleIcon from '@mui/icons-material/Google';
-import { ParentContainer, useGlobalStyles } from 'GlobalStyle';
+import { ParentContainer } from 'GlobalStyle';
 import { useCustomerDispatch, useCustomerSelector } from 'store/Customer/hooks';
 import { getUser } from 'store/Customer/selectors';
-import { logout } from 'store/Customer/Home/slice';
-import { Logout, MoreVert } from '@mui/icons-material';
+import {
+  logout,
+  setIsShowInfo,
+} from 'store/Customer/Home/slice';
+import {
+  Inventory,
+  Logout,
+  MoreVert,
+  PersonOutline,
+} from '@mui/icons-material';
 
 type Props = {};
 
@@ -43,6 +51,16 @@ function Header({}: Props) {
   const handleLogout = () => {
     dispatch(logout());
     navigate(0);
+  };
+
+  const handleShowInfo = () => {
+    dispatch(setIsShowInfo());
+    handleClose();
+  };
+
+  const handleShowPurchaseHistory = () => {
+    navigate('/my-order')
+    handleClose();
   };
 
   return (
@@ -84,7 +102,20 @@ function Header({}: Props) {
               <span onClick={handleClick}>
                 <MoreVert />
               </span>
-              <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                className={classes.dropdown}
+              >
+                <MenuItem onClick={handleShowInfo}>
+                  <PersonOutline />
+                  Thông tin của tôi
+                </MenuItem>
+                <MenuItem onClick={handleShowPurchaseHistory}>
+                  <Inventory />
+                  Lịch sử mua hàng
+                </MenuItem>
                 <MenuItem onClick={handleLogout}>
                   <Logout />
                   Đăng xuất

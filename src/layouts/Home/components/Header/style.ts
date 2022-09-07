@@ -17,7 +17,7 @@ export const useStyles = makeStyles((theme: Theme) =>
 
         '&:hover': {
           color: theme.palette.action.hover,
-        }
+        },
       },
 
       '& p': {
@@ -32,7 +32,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginLeft: 'auto !important',
       borderLeft: `1px solid ${theme.palette.grey[600]}`,
       borderRight: `1px solid ${theme.palette.grey[600]}`,
-      
+
       '& button': {
         paddingLeft: 10,
         paddingRight: 10,
@@ -42,7 +42,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         '&:hover': {
           color: `${theme.palette.action.hover} !important`,
         },
-      }
+      },
     },
 
     list: {
@@ -51,7 +51,13 @@ export const useStyles = makeStyles((theme: Theme) =>
       '& a': {
         color: theme.palette.text.primary,
         textDecoration: 'none',
-      }
-    }
+      },
+    },
+
+    dropdown: {
+      '& ul li svg': {
+        marginRight: '10px !important',
+      },
+    },
   })
 );

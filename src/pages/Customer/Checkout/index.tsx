@@ -10,7 +10,7 @@ import {
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import axiosClient from 'api/axiosClient';
+import { axiosClientWithToken } from 'api/axiosClient';
 import { add, isValid } from 'date-fns';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -64,7 +64,7 @@ const Checkout = () => {
       deliveryAddress: !user.address ? '' : user.address.trim(),
       receiverEmail: !user.email ? '' : user.email.trim(),
       receiverPhoneNumber: user.phoneNumber.trim(),
-    }
+    },
   });
 
   useEffect(() => {
@@ -76,6 +76,9 @@ const Checkout = () => {
   const onSubmit = async (data: CustomerOrder) => {
     const customerOrder: CustomerOrder = {
       ...data,
+      deliveryDate: data.deliveryDate
+        ? add(new Date(data.deliveryDate), { days: 1 })
+        : null,
       createAt: new Date(),
       status: 1,
       totalPrice: calcTotalPrice(cart),
@@ -83,19 +86,19 @@ const Checkout = () => {
     };
     const cartDetail: ProductCheckoutReq[] = cart.map((item) => ({
       productId: item.product.productId,
-      productName: item.product.productName,
+      productName: item.product.name,
       price: !!item.product.discountPercent
         ? item.product.discountPrice
         : item.product.price,
       quantity: item.quantity,
     }));
     try {
-      const res1 = await axiosClient.post(
+      const res1 = await axiosClientWithToken.post(
         'api/customerOrder/create',
         customerOrder
       );
       console.log(res1);
-      const res = await axiosClient.post('api/checkout/checkout', cartDetail);
+      const res = await axiosClientWithToken.post('api/checkout/checkout', cartDetail);
       window.location.replace(res.data.forwardLink);
     } catch (error) {
       throw new Error(String(error));
@@ -103,11 +106,13 @@ const Checkout = () => {
   };
 
   return (
-    <Container>
+    <Container className="content-block">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Grid container spacing={5}>
           <Grid item container xs={4}>
-            <Typography variant="h4">Thông tin người nhận</Typography>
+            <Typography variant="h4" style={{ marginBottom: 10 }}>
+              Thông tin người nhận
+            </Typography>
             <TextField
               type="text"
               variant="outlined"
@@ -171,7 +176,7 @@ const Checkout = () => {
                     <DatePicker
                       label="Ngày giao"
                       inputFormat="dd/MM/yyyy"
-                      minDate={add(new Date(), { days: 3 })}
+                      minDate={add(new Date(), { days: 4 })}
                       {...field}
                       renderInput={(
                         params: JSX.IntrinsicAttributes & TextFieldProps
@@ -199,9 +204,7 @@ const Checkout = () => {
                 <ListItem key={index} divider>
                   <Grid container>
                     <Grid item xs={9}>
-                      <Typography variant="h4">
-                        {item.product.productName}
-                      </Typography>
+                      <Typography variant="h4">{item.product.name}</Typography>
                       <Typography variant="subtitle1">
                         {item.product.discountPrice > 0
                           ? convertCurrency(item.product.discountPrice)

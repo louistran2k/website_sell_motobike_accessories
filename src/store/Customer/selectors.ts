@@ -23,3 +23,13 @@ export const getSearch = (state: CustomerState) => state.homeReducer.search;
 export const getAccessTokenRedux = (state: CustomerState) =>
   state.homeReducer.accessToken;
 export const getUser = (state: CustomerState) => state.homeReducer.user;
+
+export const isShowInfo = (state: CustomerState) =>
+  state.homeReducer.isShowInfo;
+
+export const isShowPurchaseDetail = (state: CustomerState) =>
+  state.homeReducer.isShowPurchaseDetail;
+
+export const getOrderId = (state: CustomerState) => state.homeReducer.orderId;
+
+export const getMyOrders = (state: CustomerState) => state.homeReducer.myOrders;

@@ -23,6 +23,9 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useStyles } from './style';
 import { ISignUp } from 'types/Customer/home';
 import { add, sub } from 'date-fns';
+import { signUp } from 'store/Customer/Home/thunkActions';
+import { useCustomerDispatch } from 'store/Customer/hooks';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const digitsOnly = (value: any) => /^\d+$/.test(value);
 export const isCitizenIdentification = (value: any) => {
@@ -75,6 +78,8 @@ const schema = yup.object().shape({
 
 const SignUp = () => {
   const classes = useStyles();
+  const dispatch = useCustomerDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -97,8 +102,11 @@ const SignUp = () => {
     setShowConfirmationPassword(!showConfirmationPassword);
   };
 
-  const onSubmit = (data: ISignUp) => {
-    console.log(data);
+  const onSubmit = async (data: ISignUp) => {
+    const res: any = await dispatch(signUp(data));
+    if (res.payload.data) {
+      navigate('/');
+    }
   };
 
   return (

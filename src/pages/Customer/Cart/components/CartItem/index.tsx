@@ -41,10 +41,12 @@ const CartItem = ({ cartItem }: Props) => {
   };
   const handleChangeQuantity = (e: ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
-    console.log(value > cartItem.product.quantityInStock ? cartItem.product.quantityInStock : value);
     const tmp = {
       productId: cartItem.product.productId,
-      quantity: value > cartItem.product.quantityInStock ? cartItem.product.quantityInStock : value,
+      quantity:
+        value > cartItem.product.quantityInStock
+          ? cartItem.product.quantityInStock
+          : value,
     };
     dispatch(setQuantityCartItem(tmp));
   };
@@ -53,7 +55,7 @@ const CartItem = ({ cartItem }: Props) => {
     <ListItem divider>
       <Grid container>
         <Grid item xs={9}>
-          <Typography variant="h4">{cartItem.product.productName}</Typography>
+          <Typography variant="h4">{cartItem.product.name}</Typography>
           <Typography variant="subtitle1">
             {cartItem.product.discountPrice > 0
               ? convertCurrency(cartItem.product.discountPrice)
